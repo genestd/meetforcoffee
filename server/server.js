@@ -23,8 +23,13 @@ app.use(session({
   cookie: {maxAge: 1000 * 60 * 60}
 }))
 
+app.use(passport.initialize())
+app.use(passport.session())
+
 routes(app, passport)
 
+app.use(express.static(__dirname+'/public'))
+console.log(__dirname+'/public')
 var listener = app.listen( process.env.PORT, function(){
   console.log('Your app is listening on port ' + process.env.PORT)
 })

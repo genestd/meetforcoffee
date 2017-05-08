@@ -1,0 +1,26 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class='container'>
+  <h1>Meet for Coffee</h1>
+  <div class='content'>
+    <form id="search">
+      <input type='text' id='searchBar' class='locationInput' placeholder="Location..."/>
+      <input type='button' class='locationBtn' value='Search' id="srchBtn"/>
+    </form>
+    <div class='table'>
+      <div class='header'>
+        <span class='cafe-name'>Name</span>
+        <span class='cafe-address'>Location</span>
+        <span class='cafe-rating'>Rating</span>
+      </div>
+      <div id='results' class='results'>
+      </div>
+    </div>
+  <script type='text/javascript' src='index.js'></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</body>
+</html>

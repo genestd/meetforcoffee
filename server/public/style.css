@@ -1,0 +1,130 @@
+body{
+  font-family: helvetica, arial, sans-serif;
+  background-image: url('coff.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+  background-size: cover;
+}
+h1{
+  text-align: center;
+  color: white;
+}
+form{
+  display: flex;
+  flex-direction: row;
+  margin: auto;
+  width: 66%;
+}
+a, a:visited, a:active{
+  color: #ffffff;
+}
+.location{
+  visibility: hidden
+}
+.container{
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.container h1{
+  flex: 0 0 auto;
+}
+.content{
+  flex: 1 0 auto;
+}
+.locationInput{
+  flex: 1 0 auto;
+  border-top-left-radius: 8px;
+  border-bottom-left-radius: 8px;
+  height: 3em;
+  background-color: #d4d4d4;
+  font-size: 12px;
+}
+.loader{
+  height: 40px;
+  width: 40px;
+}
+.locationBtn{
+  position: relative;
+  padding-left: 10px;
+  padding-right: 10px;
+  border:2px solid #207cca;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  background-color:#207cca;
+  color:#fafafa;
+  cursor: pointer;
+  font-size: 12px;
+  height: 3.5em;
+}
+.table{
+  margin-top: 10%;
+  height: 60vh;
+  max-height: 60vh;
+  width: 75%;
+  color: #ffffff;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /*background-color: rgba(111,78,55, .55);*/
+  border-radius: 8px;
+}
+.results{
+  overflow-y: scroll;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  background-color: rgba(32, 124, 202, .25);
+  border-bottom-left-radius: 8px;
+  border-bottom-right-radius: 8px;
+}
+.header{
+  flex: 0 0 auto;
+  background-color: rgba(32, 124, 202,1);
+  display: flex;
+  flex-direction: row;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  padding: 10px;
+}
+.row{
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  background-color: rgba(32, 124, 202, .25);
+}
+
+.cafe-name{
+  width: 30%;
+}
+.cafe-address{
+  width: 60%;
+}
+.cafe-rating{
+  width: 10%;
+}
+::-webkit-input-placeholder { /* For WebKit browsers */
+  padding-left: 5px;
+  font-family: helvetica, arial, sans-serif;
+  font-weight:bold;
+}
+:-moz-placeholder { /* For Mozilla Firefox 4 to 18 */
+  padding-left: 5px;
+  font-family: helvetica, arial, sans-serif;
+  font-weight:bold;
+}
+::-moz-placeholder { /* For Mozilla Firefox 19+ */
+  padding-left: 5px;
+  font-family: helvetica, arial, sans-serif;
+  font-weight:bold;
+}
+:-ms-input-placeholder { /* For Internet Explorer 10+ */
+  padding-left: 5px;
+  font-family: helvetica, arial, sans-serif;
+  font-weight:bold;
+}

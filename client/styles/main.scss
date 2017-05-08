@@ -1,0 +1,81 @@
+h2, h3{
+  text-align: center;
+  margin: 0;
+}
+
+.clearfix:before,
+.clearfix:after {
+  content: " ";
+  display: table;
+}
+.clearfix:after {
+  clear: both;
+}
+.clearfix {
+  *zoom: 1;
+}
+.pointer{
+  cursor: pointer;
+}
+.centerText{
+  text-align: center;
+  justify-content: center;
+}
+.photo{
+  display: block;
+  width: 200px;
+  height: auto;
+  margin: 10px auto;
+}
+.check{
+  max-width: 50%;
+  flex: 1 1 auto;
+  color: white;
+  padding: 5px;
+  border-radius: 15px;
+  margin: 0 5px;
+}
+.in{
+  background-color: forestgreen;
+}
+.out{
+  background-color: firebrick;
+}
+.login-input-button{
+  width: 30%;
+  margin: 0 auto;
+  border-radius: 8px;
+  height: 3em;
+  background-color:#207cca;
+  color:#fafafa;
+  cursor: pointer;
+  font-size: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.login-input{
+  flex: 1 0 auto;
+  height: 3em;
+  width: 20%;
+  min-width: 50px;
+}
+.login-label{
+  transform: translate(0, -50%);
+  position: relative;
+  display: block;
+  top: 50%;
+}
+.login-span-60{
+  width: 60%;
+}
+.login-input-value{
+  width: 60%;
+  border-radius: 8px;
+  height: 3em;
+  background-color: #d4d4d4;
+  font-size: 12px;
+}
+
+@media only screen and (max-width: 700px){
+
+}

@@ -20,7 +20,7 @@ module.exports={
   },
   devServer: {
     publicPath: '/',
-    contentBase: __dirname + '/server/public'
+    contentBase: __dirname + '/server/views'
   },
   module: {
     loaders: [
