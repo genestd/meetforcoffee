@@ -12,22 +12,24 @@ class Home extends React.Component{
   }
 
   componentDidMount(){
-    if(navigator.geolocation){
+    if(this.props.coffee.location === undefined){
+      if(navigator.geolocation){
 
-      navigator.geolocation.getCurrentPosition(
-        //success callback
-        position => this.getLocalShops(position),
-        //error callback
-        err => {
-          results.removeChild(document.getElementById('message'))
-          var errMsg = document.createElement('div')
-          errMsg.setAttribute("class", 'row')
-          errMsg.setAttribute("id", "message")
-          errMsg.appendChild(document.createTextNode("Enter your location to find local coffee shops"))
-          results.appendChild(errMsg)
-          console.log(err)
-        }
-      )
+        navigator.geolocation.getCurrentPosition(
+          //success callback
+          position => this.getLocalShops(position),
+          //error callback
+          err => {
+            results.removeChild(document.getElementById('message'))
+            var errMsg = document.createElement('div')
+            errMsg.setAttribute("class", 'row')
+            errMsg.setAttribute("id", "message")
+            errMsg.appendChild(document.createTextNode("Enter your location to find local coffee shops"))
+            results.appendChild(errMsg)
+            console.log(err)
+          }
+        )
+      }
     }
   }
 

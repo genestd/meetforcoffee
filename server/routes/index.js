@@ -18,6 +18,10 @@ module.exports = function(app, passport){
       res.sendFile( path + '/public/index.html')
     })
 
+  app.route('/LoginTwitter')
+    .get( function(req, res){
+      res.sendFile(path + '/views/LoginTwitter.html')
+    })
   app.route('/signup')
     .post( function(req, res, next) {
       passport.authenticate('local-signup', function(err, user, info) {
@@ -45,15 +49,35 @@ module.exports = function(app, passport){
         });
       })(req, res, next);
     })
+    //log out of passport, destroy session, return to index
+    app.get('/logout', function(req,res){
+      req.logout()
+      req.session.destroy(function (err) {
+          res.redirect('/'); //Inside a callback… bulletproof!
+      })
+    })
 
   app.route('/auth/twitter')
      .get( passport.authenticate('twitter'))
 
   app.route('/auth/twitter/callback')
-    .get( passport.authenticate('twitter', {
-      successRedirect: '/',
-      failureRedirect: '/Login'
-    }))
+    .get( function(req,res,next){
+      passport.authenticate('twitter', function(err, user, info){
+        if (err) {
+          console.log('twitter err')
+          return next(err);
+        }
+        if (!user) {
+          console.log('twitter user not found')
+          return res.redirect('/');
+        }
+        req.logIn(user, function(err) {
+          if (err) { return next(err); }
+          console.log('twitter user logging in', user)
+          return res.redirect('/');
+        });
+      })(req,res,next)
+    })
 
   app.get('/coffee*', function(req, res){
     var key = process.env.PLACES_KEY

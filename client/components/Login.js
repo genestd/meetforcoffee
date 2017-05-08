@@ -6,6 +6,7 @@ import * as Actions from '../actions'
 import axios from 'axios'
 
 class Login extends React.Component {
+
   constructor(props){
     super(props)
   }
@@ -35,6 +36,7 @@ class Login extends React.Component {
         console.log('err', err)
       })
   }
+
   signup(event){
     event.preventDefault()
     this.props.router.push('Signup')
@@ -65,10 +67,7 @@ class Login extends React.Component {
           <div className='row'>
           </div>
           <div className='row'>
-            <input className='login-input-button' type='button' value='Login with Twitter' id="twitterBtn" onClick={(e)=>this.loginTwitter(e)}/>
-            OR
             <input className='login-input-button' type='button' value='Sign Up' id="signupBtn" onClick={(e)=>{this.signup(e)}}/>
-
           </div>
         </div>
       </div>

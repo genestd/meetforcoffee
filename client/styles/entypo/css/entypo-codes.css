@@ -52,10 +52,12 @@
 .icon-resize-vertical:before { content: '\e832'; } /* '' */
 .icon-resize-horizontal:before { content: '\e833'; } /* '' */
 .icon-chart-line:before { content: '\e834'; } /* '' */
+.icon-sound:before { content: '\e835'; } /* '' */
+.icon-logout:before { content: '\e836'; } /* '' */
+.icon-login:before { content: '\e837'; } /* '' */
 .icon-github:before { content: '\f300'; } /* '' */
 .icon-twitter:before { content: '\f309'; } /* '' */
 .icon-gplus:before { content: '\f30f'; } /* '' */
 .icon-gplus-circled:before { content: '\f310'; } /* '' */
 .icon-linkedin:before { content: '\f318'; } /* '' */
 .icon-linkedin-circled:before { content: '\f319'; } /* '' */
-.icon-logo-db:before { content: '\f603'; } /* '' */

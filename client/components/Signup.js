@@ -64,8 +64,6 @@ class Signup extends React.Component {
           <div className='row'>
           </div>
           <div className='row'>
-            <input className='login-input-button' type='button' value='Login with Twitter' id="twitterBtn" onClick={(e)=>this.loginTwitter(e)}/>
-            OR
             <input className='login-input-button' type='button' value='Login' id="twitterBtn" onClick={(e)=>this.login(e)}/>
           </div>
         </div>

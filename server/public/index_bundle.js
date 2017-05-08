@@ -9414,23 +9414,25 @@ var Home = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      if (navigator.geolocation) {
+      if (this.props.coffee.location === undefined) {
+        if (navigator.geolocation) {
 
-        navigator.geolocation.getCurrentPosition(
-        //success callback
-        function (position) {
-          return _this2.getLocalShops(position);
-        },
-        //error callback
-        function (err) {
-          results.removeChild(document.getElementById('message'));
-          var errMsg = document.createElement('div');
-          errMsg.setAttribute("class", 'row');
-          errMsg.setAttribute("id", "message");
-          errMsg.appendChild(document.createTextNode("Enter your location to find local coffee shops"));
-          results.appendChild(errMsg);
-          console.log(err);
-        });
+          navigator.geolocation.getCurrentPosition(
+          //success callback
+          function (position) {
+            return _this2.getLocalShops(position);
+          },
+          //error callback
+          function (err) {
+            results.removeChild(document.getElementById('message'));
+            var errMsg = document.createElement('div');
+            errMsg.setAttribute("class", 'row');
+            errMsg.setAttribute("id", "message");
+            errMsg.appendChild(document.createTextNode("Enter your location to find local coffee shops"));
+            results.appendChild(errMsg);
+            console.log(err);
+          });
+        }
       }
     }
   }, {
@@ -17456,6 +17458,15 @@ var Details = function (_React$Component) {
       _this.props.actions.setReferrer(_this.props.location.pathname);
     };
 
+    _this.login = function () {
+      _this.setReferrer();
+      _this.props.router.push('/Login');
+    };
+
+    _this.logout = function () {
+      window.location = '/logout';
+    };
+
     _this.place = _this.props.coffee.shops[_this.props.params.id];
     return _this;
   }
@@ -17465,18 +17476,22 @@ var Details = function (_React$Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      var url = '/photos/' + this.place.photos[0].photo_reference;
-      _axios2.default.get(url).then(function (res) {
-        if (res.data) {
-          console.log('setting photo');
-          _this2.props.actions.setPhoto(res.data);
-        } else {
-          console.log('no photo');
-          _this2.props.actions.setPhoto(undefined);
-        }
-      }).catch(function (err) {
-        console.log(err);
-      });
+      if (this.place.photos) {
+        var url = '/photos/' + this.place.photos[0].photo_reference;
+        _axios2.default.get(url).then(function (res) {
+          if (res.data) {
+            console.log('setting photo');
+            _this2.props.actions.setPhoto(res.data);
+          } else {
+            console.log('no photo');
+            _this2.props.actions.setPhoto('/cafe.jpg');
+          }
+        }).catch(function (err) {
+          console.log(err);
+        });
+      } else {
+        this.props.actions.setPhoto(undefined);
+      }
       _axios2.default.get('/userlist/' + this.place.place_id).then(function (res) {
         _this2.props.actions.setUserList(res.data.userlist);
       }).catch(function (err) {
@@ -17486,7 +17501,14 @@ var Details = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
-      console.log(this.props.coffee);
+      var _this3 = this;
+
+      var login = _react2.default.createElement('i', { className: 'icon-login pointer', onClick: function onClick() {
+          _this3.login();
+        } });
+      var logout = _react2.default.createElement('i', { className: 'icon-logout pointer', onClick: function onClick() {
+          _this3.logout();
+        } });
       var userlist = void 0;
       if (this.props.coffee.loggedIn) {
         if (this.props.coffee.userlist.length > 0) {
@@ -17510,23 +17532,35 @@ var Details = function (_React$Component) {
         );
       }
       var photo = void 0;
-      if (this.place.photos[0].photo_reference) {
+      if (this.place.photos) {
         photo = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyB3pZMGgwpwUhZs313dMZ_L9u9ZfW3TBaU&maxwidth=200&photoreference=" + this.place.photos[0].photo_reference;
       } else {
-        photo = 'loader.svg';
+        photo = '/cafe.jpg';
       }
       return _react2.default.createElement(
         'div',
-        { className: 'table' },
+        { className: 'table-users' },
         _react2.default.createElement(
           'div',
-          { className: 'header centerText' },
+          { className: 'header spaceBetween' },
+          _react2.default.createElement(
+            'h2',
+            null,
+            _react2.default.createElement('i', { className: 'icon-home pointer', onClick: function onClick() {
+                _this3.props.router.push('/');
+              } })
+          ),
           _react2.default.createElement(
             'h2',
             { className: 'noMargin' },
             this.place.name,
             ' - Rating: ',
             this.place.rating
+          ),
+          _react2.default.createElement(
+            'h2',
+            null,
+            this.props.coffee.loggedIn ? logout : login
           )
         ),
         _react2.default.createElement(
@@ -17746,10 +17780,6 @@ var Login = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'row' },
-            _react2.default.createElement('input', { className: 'login-input-button', type: 'button', value: 'Login with Twitter', id: 'twitterBtn', onClick: function onClick(e) {
-                return _this3.loginTwitter(e);
-              } }),
-            'OR',
             _react2.default.createElement('input', { className: 'login-input-button', type: 'button', value: 'Sign Up', id: 'signupBtn', onClick: function onClick(e) {
                 _this3.signup(e);
               } })
@@ -17981,10 +18011,6 @@ var Signup = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'row' },
-            _react2.default.createElement('input', { className: 'login-input-button', type: 'button', value: 'Login with Twitter', id: 'twitterBtn', onClick: function onClick(e) {
-                return _this3.loginTwitter(e);
-              } }),
-            'OR',
             _react2.default.createElement('input', { className: 'login-input-button', type: 'button', value: 'Login', id: 'twitterBtn', onClick: function onClick(e) {
                 return _this3.login(e);
               } })
@@ -19045,7 +19071,7 @@ exports = module.exports = __webpack_require__(172)(true);
 
 
 // module
-exports.push([module.i, "h2, h3 {\n  text-align: center;\n  margin: 0; }\n\n.clearfix:before,\n.clearfix:after {\n  content: \" \";\n  display: table; }\n\n.clearfix:after {\n  clear: both; }\n\n.clearfix {\n  *zoom: 1; }\n\n.pointer {\n  cursor: pointer; }\n\n.centerText {\n  text-align: center;\n  justify-content: center; }\n\n.photo {\n  display: block;\n  width: 200px;\n  height: auto;\n  margin: 10px auto; }\n\n.check {\n  max-width: 50%;\n  flex: 1 1 auto;\n  color: white;\n  padding: 5px;\n  border-radius: 15px;\n  margin: 0 5px; }\n\n.in {\n  background-color: forestgreen; }\n\n.out {\n  background-color: firebrick; }\n\n.login-input-button {\n  width: 30%;\n  margin: 0 auto;\n  border-radius: 8px;\n  height: 3em;\n  background-color: #207cca;\n  color: #fafafa;\n  cursor: pointer;\n  font-size: 12px;\n  padding-left: 10px;\n  padding-right: 10px; }\n\n.login-input {\n  flex: 1 0 auto;\n  height: 3em;\n  width: 20%;\n  min-width: 50px; }\n\n.login-label {\n  transform: translate(0, -50%);\n  position: relative;\n  display: block;\n  top: 50%; }\n\n.login-span-60 {\n  width: 60%; }\n\n.login-input-value {\n  width: 60%;\n  border-radius: 8px;\n  height: 3em;\n  background-color: #d4d4d4;\n  font-size: 12px; }\n", "", {"version":3,"sources":["/Users/dgenest/webdev/meetforcoffee/client/styles/main.scss"],"names":[],"mappings":"AAAA;EACE,mBAAkB;EAClB,UAAS,EACV;;AAED;;EAEE,aAAY;EACZ,eAAc,EACf;;AACD;EACE,YAAW,EACZ;;AACD;GACE,QAAQ,EACT;;AACD;EACE,gBAAe,EAChB;;AACD;EACE,mBAAkB;EAClB,wBAAuB,EACxB;;AACD;EACE,eAAc;EACd,aAAY;EACZ,aAAY;EACZ,kBAAiB,EAClB;;AACD;EACE,eAAc;EACd,eAAc;EACd,aAAY;EACZ,aAAY;EACZ,oBAAmB;EACnB,cAAa,EACd;;AACD;EACE,8BAA6B,EAC9B;;AACD;EACE,4BAA2B,EAC5B;;AACD;EACE,WAAU;EACV,eAAc;EACd,mBAAkB;EAClB,YAAW;EACX,0BAAwB;EACxB,eAAa;EACb,gBAAe;EACf,gBAAe;EACf,mBAAkB;EAClB,oBAAmB,EACpB;;AACD;EACE,eAAc;EACd,YAAW;EACX,WAAU;EACV,gBAAe,EAChB;;AACD;EACE,8BAA6B;EAC7B,mBAAkB;EAClB,eAAc;EACd,SAAQ,EACT;;AACD;EACE,WAAU,EACX;;AACD;EACE,WAAU;EACV,mBAAkB;EAClB,YAAW;EACX,0BAAyB;EACzB,gBAAe,EAChB","file":"main.scss","sourcesContent":["h2, h3{\n  text-align: center;\n  margin: 0;\n}\n\n.clearfix:before,\n.clearfix:after {\n  content: \" \";\n  display: table;\n}\n.clearfix:after {\n  clear: both;\n}\n.clearfix {\n  *zoom: 1;\n}\n.pointer{\n  cursor: pointer;\n}\n.centerText{\n  text-align: center;\n  justify-content: center;\n}\n.photo{\n  display: block;\n  width: 200px;\n  height: auto;\n  margin: 10px auto;\n}\n.check{\n  max-width: 50%;\n  flex: 1 1 auto;\n  color: white;\n  padding: 5px;\n  border-radius: 15px;\n  margin: 0 5px;\n}\n.in{\n  background-color: forestgreen;\n}\n.out{\n  background-color: firebrick;\n}\n.login-input-button{\n  width: 30%;\n  margin: 0 auto;\n  border-radius: 8px;\n  height: 3em;\n  background-color:#207cca;\n  color:#fafafa;\n  cursor: pointer;\n  font-size: 12px;\n  padding-left: 10px;\n  padding-right: 10px;\n}\n.login-input{\n  flex: 1 0 auto;\n  height: 3em;\n  width: 20%;\n  min-width: 50px;\n}\n.login-label{\n  transform: translate(0, -50%);\n  position: relative;\n  display: block;\n  top: 50%;\n}\n.login-span-60{\n  width: 60%;\n}\n.login-input-value{\n  width: 60%;\n  border-radius: 8px;\n  height: 3em;\n  background-color: #d4d4d4;\n  font-size: 12px;\n}\n\n@media only screen and (max-width: 700px){\n\n}\n"],"sourceRoot":""}]);
+exports.push([module.i, "h2, h3 {\n  text-align: center;\n  margin: 0; }\n\n.clearfix:before,\n.clearfix:after {\n  content: \" \";\n  display: table; }\n\n.clearfix:after {\n  clear: both; }\n\n.clearfix {\n  *zoom: 1; }\n\n.pointer {\n  cursor: pointer; }\n\n.centerText {\n  text-align: center;\n  justify-content: center; }\n\n.spaceBetween {\n  justify-content: space-between; }\n\n.photo {\n  display: block;\n  width: 200px;\n  height: auto;\n  margin: 10px auto; }\n\n.check {\n  max-width: 50%;\n  flex: 1 1 auto;\n  color: white;\n  padding: 5px;\n  border-radius: 15px;\n  margin: 0 5px; }\n\n.in {\n  background-color: forestgreen; }\n\n.out {\n  background-color: firebrick; }\n\n.login-input-button {\n  width: 30%;\n  margin: 0 auto;\n  border-radius: 8px;\n  height: 3em;\n  background-color: #207cca;\n  color: #fafafa;\n  cursor: pointer;\n  font-size: 12px;\n  padding-left: 10px;\n  padding-right: 10px; }\n\n.login-input {\n  flex: 1 0 auto;\n  height: 3em;\n  width: 20%;\n  min-width: 50px; }\n\n.login-label {\n  transform: translate(0, -50%);\n  position: relative;\n  display: block;\n  top: 50%; }\n\n.login-span-60 {\n  width: 60%; }\n\n.login-input-value {\n  width: 60%;\n  border-radius: 8px;\n  height: 3em;\n  background-color: #d4d4d4;\n  font-size: 12px; }\n\n.table, .table-users {\n  margin-top: 10%;\n  width: 75%;\n  color: #ffffff;\n  margin-left: auto;\n  margin-right: auto;\n  display: flex;\n  flex-direction: column;\n  justify-content: flex-start;\n  /*background-color: rgba(111,78,55, .55);*/\n  border-radius: 8px; }\n\n.table {\n  height: 60vh;\n  max-height: 60vh; }\n\n.table-users {\n  overflow: auto; }\n", "", {"version":3,"sources":["/Users/dgenest/webdev/meetforcoffee/client/styles/main.scss"],"names":[],"mappings":"AAAA;EACE,mBAAkB;EAClB,UAAS,EACV;;AAED;;EAEE,aAAY;EACZ,eAAc,EACf;;AACD;EACE,YAAW,EACZ;;AACD;GACE,QAAQ,EACT;;AACD;EACE,gBAAe,EAChB;;AACD;EACE,mBAAkB;EAClB,wBAAuB,EACxB;;AACD;EACE,+BAA8B,EAC/B;;AACD;EACE,eAAc;EACd,aAAY;EACZ,aAAY;EACZ,kBAAiB,EAClB;;AACD;EACE,eAAc;EACd,eAAc;EACd,aAAY;EACZ,aAAY;EACZ,oBAAmB;EACnB,cAAa,EACd;;AACD;EACE,8BAA6B,EAC9B;;AACD;EACE,4BAA2B,EAC5B;;AACD;EACE,WAAU;EACV,eAAc;EACd,mBAAkB;EAClB,YAAW;EACX,0BAAwB;EACxB,eAAa;EACb,gBAAe;EACf,gBAAe;EACf,mBAAkB;EAClB,oBAAmB,EACpB;;AACD;EACE,eAAc;EACd,YAAW;EACX,WAAU;EACV,gBAAe,EAChB;;AACD;EACE,8BAA6B;EAC7B,mBAAkB;EAClB,eAAc;EACd,SAAQ,EACT;;AACD;EACE,WAAU,EACX;;AACD;EACE,WAAU;EACV,mBAAkB;EAClB,YAAW;EACX,0BAAyB;EACzB,gBAAe,EAChB;;AACD;EACE,gBAAe;EACf,WAAU;EACV,eAAc;EACd,kBAAiB;EACjB,mBAAkB;EAClB,cAAa;EACb,uBAAsB;EACtB,4BAA2B;EAC3B,2CAA2C;EAC3C,mBAAkB,EACnB;;AACD;EACE,aAAY;EACZ,iBAAgB,EACjB;;AACD;EACE,eAAc,EACf","file":"main.scss","sourcesContent":["h2, h3{\n  text-align: center;\n  margin: 0;\n}\n\n.clearfix:before,\n.clearfix:after {\n  content: \" \";\n  display: table;\n}\n.clearfix:after {\n  clear: both;\n}\n.clearfix {\n  *zoom: 1;\n}\n.pointer{\n  cursor: pointer;\n}\n.centerText{\n  text-align: center;\n  justify-content: center;\n}\n.spaceBetween{\n  justify-content: space-between;\n}\n.photo{\n  display: block;\n  width: 200px;\n  height: auto;\n  margin: 10px auto;\n}\n.check{\n  max-width: 50%;\n  flex: 1 1 auto;\n  color: white;\n  padding: 5px;\n  border-radius: 15px;\n  margin: 0 5px;\n}\n.in{\n  background-color: forestgreen;\n}\n.out{\n  background-color: firebrick;\n}\n.login-input-button{\n  width: 30%;\n  margin: 0 auto;\n  border-radius: 8px;\n  height: 3em;\n  background-color:#207cca;\n  color:#fafafa;\n  cursor: pointer;\n  font-size: 12px;\n  padding-left: 10px;\n  padding-right: 10px;\n}\n.login-input{\n  flex: 1 0 auto;\n  height: 3em;\n  width: 20%;\n  min-width: 50px;\n}\n.login-label{\n  transform: translate(0, -50%);\n  position: relative;\n  display: block;\n  top: 50%;\n}\n.login-span-60{\n  width: 60%;\n}\n.login-input-value{\n  width: 60%;\n  border-radius: 8px;\n  height: 3em;\n  background-color: #d4d4d4;\n  font-size: 12px;\n}\n.table, .table-users{\n  margin-top: 10%;\n  width: 75%;\n  color: #ffffff;\n  margin-left: auto;\n  margin-right: auto;\n  display: flex;\n  flex-direction: column;\n  justify-content: flex-start;\n  /*background-color: rgba(111,78,55, .55);*/\n  border-radius: 8px;\n}\n.table{\n  height: 60vh;\n  max-height: 60vh;\n}\n.table-users{\n  overflow: auto;\n}\n@media only screen and (max-width: 700px){\n\n}\n"],"sourceRoot":""}]);
 
 // exports
 

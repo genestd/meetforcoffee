@@ -21,6 +21,9 @@ h2, h3{
   text-align: center;
   justify-content: center;
 }
+.spaceBetween{
+  justify-content: space-between;
+}
 .photo{
   display: block;
   width: 200px;
@@ -75,7 +78,25 @@ h2, h3{
   background-color: #d4d4d4;
   font-size: 12px;
 }
-
+.table, .table-users{
+  margin-top: 10%;
+  width: 75%;
+  color: #ffffff;
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /*background-color: rgba(111,78,55, .55);*/
+  border-radius: 8px;
+}
+.table{
+  height: 60vh;
+  max-height: 60vh;
+}
+.table-users{
+  overflow: auto;
+}
 @media only screen and (max-width: 700px){
 
 }

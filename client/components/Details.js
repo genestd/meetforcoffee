@@ -14,20 +14,24 @@ class Details extends React.Component{
   }
 
   componentDidMount(){
-    let url = '/photos/'+this.place.photos[0].photo_reference
-    axios.get(url)
-      .then( res=>{
-        if (res.data){
-          console.log('setting photo')
-          this.props.actions.setPhoto(res.data)
-        } else {
-          console.log('no photo')
-          this.props.actions.setPhoto(undefined)
-        }
-      })
-      .catch( err=>{
-        console.log(err)
-      })
+    if(this.place.photos){
+      let url = '/photos/'+this.place.photos[0].photo_reference
+      axios.get(url)
+        .then( res=>{
+          if (res.data){
+            console.log('setting photo')
+            this.props.actions.setPhoto(res.data)
+          } else {
+            console.log('no photo')
+            this.props.actions.setPhoto('/cafe.jpg')
+          }
+        })
+        .catch( err=>{
+          console.log(err)
+        })
+    } else {
+      this.props.actions.setPhoto(undefined)
+    }
     axios.get('/userlist/'+this.place.place_id)
       .then( res=>{
         this.props.actions.setUserList(res.data.userlist)
@@ -75,8 +79,17 @@ class Details extends React.Component{
     this.props.actions.setReferrer(this.props.location.pathname)
   }
 
+  login = () => {
+    this.setReferrer()
+    this.props.router.push('/Login')
+  }
+
+  logout = () => {
+    window.location = '/logout'
+  }
   render(){
-    console.log(this.props.coffee)
+    let login  = (<i className='icon-login pointer' onClick={()=>{this.login()}}></i>)
+    let logout = (<i className='icon-logout pointer' onClick={()=>{this.logout()}}></i>)
     let userlist
     if(this.props.coffee.loggedIn){
       if(this.props.coffee.userlist.length > 0 ){
@@ -91,15 +104,17 @@ class Details extends React.Component{
       userlist = (<span onClick={this.setReferrer}><Link to='/Login'>Log in</Link> to see who is checked in</span>)
     }
     let photo
-    if (this.place.photos[0].photo_reference){
+    if (this.place.photos){
       photo = "https://maps.googleapis.com/maps/api/place/photo?key=AIzaSyB3pZMGgwpwUhZs313dMZ_L9u9ZfW3TBaU&maxwidth=200&photoreference=" + this.place.photos[0].photo_reference
     } else {
-      photo = 'loader.svg'
+      photo = '/cafe.jpg'
     }
     return(
-      <div className='table'>
-        <div className='header centerText'>
+      <div className='table-users'>
+        <div className='header spaceBetween'>
+          <h2><i className='icon-home pointer' onClick={()=>{this.props.router.push('/')}}></i></h2>
           <h2 className='noMargin'>{this.place.name} - Rating: {this.place.rating}</h2>
+          <h2>{this.props.coffee.loggedIn ? logout : login}</h2>
         </div>
         <div className='results'>
           <img className='photo' src={photo}/>
